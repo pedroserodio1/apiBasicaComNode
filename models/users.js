@@ -1,6 +1,9 @@
 const con = require('./connection');
 const nodemailer = require('nodemailer');
+const credentials = require('../config/credentials.json');
 
+const user = credentials.user;
+const pass = credentials.pass;
 class Users{
     createUser(data, res){
         const sql = "INSERT INTO Users SET ?";
@@ -10,28 +13,28 @@ class Users{
             }
             res.json({status: "Registro concluido", dados: {Name: data.name, email: data.email}});
             
-            // const transporter = nodemailer.createTransport({
-            //     host: "smtp.gmail.com",
-            //     port: 587,
-            //     secure: false,
-            //     auth:{
-            //         user: "rennofelipe3@gmail.com",
-            //         pass: "Luanemtgay"
-            //     }
-            // });
+            const transporter = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 587,
+                secure: false,
+                auth:{
+                    user,
+                    pass
+                }
+            });
 
-            // try{
-            //     await transporter.sendMail({
-            //         from: 'rennofelipe3@gmail.com',
-            //         to: data.email,
-            //         replyTo: 'rennofelipe3@gmail.com',
-            //         subject: "teste",
-            //         text: "Teste de envio de email com node mailer"
+            try{
+                await transporter.sendMail({
+                    from: 'rennofelipe3@gmail.com',
+                    to: data.email,
+                    replyTo: 'rennofelipe3@gmail.com',
+                    subject: "teste",
+                    text: "Teste de envio de email com node mailer"
 
-            //     });
-            // }catch(error){
-            //     return res.status(400).json(error);
-            // }
+                });
+            }catch(error){
+                return res.status(400).json(error);
+            }
         });
     }
 
