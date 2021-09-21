@@ -24,4 +24,9 @@ module.exports = (app) => {
         const data = req.body;
         user.editUser(id, data, res);
     })
+
+    app.get("/listUsers/:name", (req, res) => {
+        const name = req.params.name;
+        user.searchUser(name, res);
+    })
 }
