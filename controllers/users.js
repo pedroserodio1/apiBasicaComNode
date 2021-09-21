@@ -18,7 +18,7 @@ module.exports = (app) => {
         user.deleteUser(id, res);
     })
 
-    app.put("/editUser/:id", (req, res) => {
+    app.patch("/editUser/:id", (req, res) => {
         
         const id = req.params.id;
         const data = req.body;
