@@ -1,9 +1,17 @@
 const con = require('./connection');
 const nodemailer = require('nodemailer');
+const { jsPDF } = require('jspdf');
 const credentials = require('../config/credentials.json');
 
 const user = credentials.user;
 const pass = credentials.pass;
+
+//criando instancia do jspdf
+const doc = new jsPDF();
+
+doc.setFont('helvetica');
+doc.setFontSize(12);
+
 
 //Configurando transportador do email
 const transporter = nodemailer.createTransport({
@@ -16,17 +24,25 @@ const transporter = nodemailer.createTransport({
     }
 });
 class Users{
+
     createUser(data, res){
+
         const emailVerification = `SELECT email FROM users WHERE email = ?`;
+
         con.query(emailVerification, data.email, async (error, result) => {
+
             if(error){
                 res.status(400).json(error);
             }else{
+
                 if(result.length >= 1){
                     res.status(400).json({erro: `O email: ${data.email} ja existe, tente com outro`});
                 }else{
+
                     const sql = "INSERT INTO Users SET ?";
+
                     con.query(sql, data, async (error, result) => {
+
                         if(error){
                             return res.json(error);
                         }
@@ -40,10 +56,14 @@ class Users{
                                 text: `Obrigado ${data.name} por se cadastar no nosso sistema`
             
                             });
+
                         }catch(error){
+
                             return res.status(400).json(error);
+
                         }
-                        res.json({status: "Registro concluido", dados: {Name: data.name, email: data.email}});
+
+                        res.status(200).json({status: "Registro concluido", dados: {Name: data.name, email: data.email}});
                     
                     });
                 }
@@ -54,28 +74,33 @@ class Users{
     }
 
     listUser(res){
+
         const sql = "SELECT * FROM users";
         con.query(sql, (error, result) => {
             if(error){  
-                return res.json(error);
+                return res.status(400).json(error);
             }
-            res.json(result);
+            res.status(200).json(result);
+
         });
     }
 
     deleteUser(id, res){
+
         const deleteData = `SELECT * FROM users WHERE id = ?`;
         con.query(deleteData, id, (error, result) => {
+
             if(error){
-                return res.json(error);
+                return res.status(400).json(error);
             }else{
 
             const sql = "DELETE FROM users WHERE id = ?";
             con.query(sql, id, (error) => {
                 if(error){
-                    return res.json(error);
+                    return res.status(400).json(error);
                 }
-                res.json({status: "Usuario excluido", dados: result});
+
+                res.status(200).json({status: "Usuario excluido", dados: result});
 
             });
             }
@@ -84,26 +109,31 @@ class Users{
     }
 
     editUser(id, data, res){
+
         const emailVerification = `SELECT email FROM users WHERE email = ?`
         con.query(emailVerification, data.email, (error, result) => {
+
             if(error){
-                return res.json(error)
+                return res.status(400).json(error)
             }else{
                 if(result.length >= 1){
                     res.status(400).json({erro: "Email ja cadastrado, tente com outro"})
                 }else{
+
                     const editedData = `SELECT * FROM users WHERE id = ?`;
                     con.query(editedData, id, (error, result) =>{
                         if(error){
-                            return res.json(error);
+                            return res.status(400).json(error);
                         }
+
                         var oldData = result;
+
                         const sql = `UPDATE users SET name = '${data.name}', email = '${data.email}', senha = '${data.senha}' WHERE id = ?`;
                         con.query(sql, id, (error, result) => {
                             if(error){
-                                return res.json(error);
+                                return res.status(400).json(error);
                             }
-                            res.json({status: "Usuario Atualizado", "dados antigos": oldData, "dados atualizados": data});
+                            res.status(200).json({status: "Usuario Atualizado", "dados antigos": oldData, "dados atualizados": data});
                         })
                          
                     });
@@ -115,15 +145,66 @@ class Users{
     }
 
     searchUser(name, res){
+        
         const search = "SELECT * FROM users WHERE name = ?";
+
         con.query(search, name, (error, result)=>{
             if(error){
-                return res.json(error);
+                return res.status(400).json(error);
             }
-            res.json(result);
+
+            res.status(200).json(result);
         })
     }
 
+    createPDF(res){
+        const date = new Date();
+
+        const sql = "SELECT name, email FROM users";
+        con.query(sql, async (error, result) => {
+
+            if(error){
+                return res.status(400).json(error);
+            }
+
+            try{
+
+                doc.text("Usuários", 90, 10);
+                let y = 30;
+            
+                result.forEach((user) => {
+                
+                    doc.text(`Nome: ${user.name}` ,50, y);
+                    doc.text(` Email: ${user.email}`, 125, y);
+                    y+=10;
+                });
+            
+            
+                doc.save(`./documents/${date.getTime()}.pdf`);
+
+                await transporter.sendMail({
+                    from: `Pedro Henrique" '${user}'`,
+                    to: "serodiomg@gmail.com",
+                    replyTo: user,
+                    subject: "Usuarios cadastrados", 
+                    text: `Documento com todos os usuarios cadastrados no sistema`,
+                    attachments:[{
+                        filename: `${date.getTime()}.pdf`,
+                        path: `./documents/${date.getTime()}.pdf`,
+                        contentType: 'aplication/pdf'
+                    }]
+                })
+
+                res.status(200).json({status: "Pdf gerado", "Caminho do documento" : `./documents/${date.getTime()}.pdf`})
+
+            }catch(error){
+                res.status(500).json(error);
+            }
+        })
+    }
+    
 }
+
+
 
 module.exports = new Users;
