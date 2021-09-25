@@ -169,14 +169,27 @@ class Users{
 
             try{
 
-                doc.text("Usuários", 90, 10);
+                doc.text("Usuários",105, 10, "center");
                 let y = 30;
-            
+                let num = 1;
+                let numMaximo = 27;
+
                 result.forEach((user) => {
                 
-                    doc.text(`Nome: ${user.name}` ,50, y);
-                    doc.text(` Email: ${user.email}`, 125, y);
+                    if(num > numMaximo){
+                        doc.addPage(); 
+                        numMaximo += 30;
+                        console.log(numMaximo);
+                        
+                    }
+                    doc.text(`${num}. Nome: ${user.name}` ,60, y);
+                    doc.text(` Email: ${user.email}`, 115, y);
                     y+=10;
+                    console.log(num, user);
+                    num++;
+                    
+                    
+
                 });
             
             
