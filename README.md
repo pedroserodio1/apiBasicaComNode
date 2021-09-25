@@ -33,7 +33,7 @@
 | Edição de usuario          | Edita um registro referente a um usuario                        | /editUser/id                 |  patch |         não         |     Id Do usuario   |
 | deletar um usuario         | Exclui um registro referente a um usuario                       | /deleteUser/:id              | delete |         não         |     Id Do usuario   |
 | Listar usuarios            | Lista todos os usuarios cadastrados                             | /listUsers                   | Get    |    sem parâmetro    |                     |
-| listar usuarios por nome   | lista usuarios pelos nomes especificos                          | //listUsers/name             |   get  |         nâo         |     Nome do usuario |
+| listar usuarios por nome   | lista usuarios pelos nomes especificos                          | /listUsers/name              |   get  |         nâo         |     Nome do usuario |
 | Cria pdf                   | Cria um pdf com todos os usuarios cadastrados                   | /createPDF                   |   get  |    sem parâmetro    |                     |
 
 
