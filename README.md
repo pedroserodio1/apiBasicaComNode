@@ -55,9 +55,10 @@ As seguintes ferramentas foram usadas na construção do projeto:
 ---
 
 <a href="https://www.facebook.com/pedrohenrique.serodio30/">
- <img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/62827681?s=400&u=f0b18831e6690a901f956d637933b9ee2dca3104&v=4" width="100px;" alt=""/>
+ <img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/48389538?s=400&u=ab8fd6f5b69523af3dbb47b6a59613551a809abb&v=4" width="100px;" alt=""/>
  <br />
  <h2><b>Pedro Serôdio</b></h2></a>
 
 [![Linkedin Badge](https://img.shields.io/badge/-pedro%20serodio-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/tgmarinho/)](https://www.linkedin.com/in/pedroserodio1) 
 [![Gmail Badge](https://img.shields.io/badge/-serodiomg@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:serodiomg@gmail.com)](mailto:serodiomg@gmail.com)
+
