@@ -23,9 +23,7 @@
 - [x] Envio de email quando usuario é cadastrado
 
 - [x] Envio de email com pdf dos usuarios cadastrados
-	-
 
-	-
 
 ### Rotas
 
